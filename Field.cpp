@@ -21,8 +21,6 @@ Field::Field()
 	// зануляем координаты центральной точки
 	m_center_real_coord[0] = 0;
 	m_center_real_coord[1] = 0;
-	m_center_scale_coord[0] = 0;
-	m_center_scale_coord[1] = 0;
 
 	std::cout << "Empty field created.\n";
 }
@@ -93,7 +91,7 @@ void Field::Add_dot(const double& r_X, const double& r_Y)
 
 	// устанавливаем наибольшее значение реального расстояния между соседними точками для сохранения масштаба по осям
 	min_behind_x > min_behind_y ? m_length_behind = min_behind_x : m_length_behind = min_behind_y;
-	std::cout << "m_length_behind " << m_length_behind << '\n';
+	//std::cout << "m_length_behind " << m_length_behind << '\n';
 
 		// находим реальные координаты центральной точки
 	m_center_real_coord[0] = min_x + max_behind_x/2.0;
@@ -140,19 +138,78 @@ void Field::Draw()
 	};
 
 	// отрисовка
-	std::cout << "-----------------------------------------------\n";
+	for (int i = 0; i < FIELD_LENGTH; ++i)
+	{
+		std::cout << "-";
+	};
+	std::cout << '\n';
+			;
     for (int i = FIELD_WIDTH - 1; i >= 0; i--) // сначала по ширине с конца массива, причем -1, чтобы не выйти за границы
     {
     	for (int j = 0; j < FIELD_LENGTH; j++) // потом по длине с начала массива
     	{
-    		std::cout << field[j][i] << " ";
+    		std::cout << field[j][i];
     	};
     	std::cout << "\n";
     };
-    std::cout << "-----------------------------------------------\n";
+
+	for (int i = 0; i < FIELD_LENGTH; ++i)
+	{
+		std::cout << "-";
+	};
+	std::cout << '\n';
 }
 
+// добавить отрезок
+// [in] const double& - реальная координата по Х начала отрезка
+// [in] const double& - реальная координата по Y начала отрезка
+// [in] const double& - реальная координата по Х конца отрезка
+// [in] const double& - реальная координата по Y конца отрезка
+void Field::Add_line_segment(const double& r_DOT1_X, const double& r_DOT1_Y, const double& r_DOT2_X, const double& r_DOT2_Y)
+{
+	// переписать количество точек, используемых для построения отрезка            <-------------------------------
 
+	// вычисляем количество точек, необходимых для отображения отрезка
+	int count_of_dots = std::sqrt(FIELD_LENGTH*FIELD_LENGTH + FIELD_WIDTH*FIELD_WIDTH);
+	std::cout << "count_of_dots = " << count_of_dots << '\n';
+
+	// уравнение для отрезка на плоскости: (х-х1)/(х2-х1) = (у-у1)/(у2-у1),
+	// где х1 и у1 координаты первой точки, х2 и у2 координаты второй точки
+
+	// длина сегмента проекции отрезка на ось х
+	double length_segm_x_proection = std::abs(r_DOT2_X - r_DOT1_X)/count_of_dots;
+	// длина сегмента проекции отрезка на ось y
+	double length_segm_y_proection = std::abs(r_DOT2_Y - r_DOT1_Y)/count_of_dots;
+
+	// выбираем длину сегмента (бОльшую)
+	double segment_length;
+	length_segm_x_proection > length_segm_y_proection ? segment_length = length_segm_x_proection : segment_length = length_segm_y_proection;
+	std::cout << "segment_length = " << segment_length << '\n';
+
+	// добавляем точки отрезка в вектор
+	for (int i = 0; i <= count_of_dots; i++)
+	{
+		// временная координата х
+		double x_dot;
+
+		// условие для установки направления построения отрезка
+		if (r_DOT1_X < r_DOT2_X)
+		{
+			x_dot = r_DOT1_X + i * segment_length;
+		}
+		else
+		{
+			x_dot = r_DOT1_X - i * segment_length;
+		};
+
+		//std::cout << "r_DOT2_X - r_DOT1_X = " << r_DOT2_X - r_DOT1_X << '\n';
+
+		// из уравнения прямой находим реальную координату у
+		// чтобы исключить деление на ноль добавляется бесконечно малое
+		double y_dot = (x_dot - r_DOT1_X) / (r_DOT2_X - r_DOT1_X + INF_MIN_DELTA) * (r_DOT2_Y - r_DOT1_Y) + r_DOT1_Y;
+		Add_dot(x_dot, y_dot);
+	};
+}
 
 
 

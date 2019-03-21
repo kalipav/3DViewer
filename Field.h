@@ -19,9 +19,6 @@ private:
 	// реальные координаты центральной точки
 	double m_center_real_coord[2];
 
-	// смасштабированные координаты центральной точки
-	int m_center_scale_coord[2];
-
 public:
 	// конструктор
 	Field();
@@ -34,6 +31,9 @@ public:
 
 	// отрисовка
 	void Draw();
+
+	// добавить отрезок
+	void Add_line_segment(const double&, const double&, const double&, const double&);
 
 
 };

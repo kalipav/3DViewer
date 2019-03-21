@@ -13,7 +13,7 @@ Dot::Dot(const double& r_X, const double& r_Y)
 	m_scale_coord[0] = 0;
 	m_scale_coord[1] = 0;
 
-	std::cout << "Constructor. Set real coordinates of dot.\n";
+	//std::cout << "Constructor. Set real coordinates of dot.\n";
 }
 
 // установить значения координат
@@ -63,7 +63,7 @@ void Dot::Set_scale_coord(const double& r_LENGTH_BEHIND, const double* p_REAL_CE
 	temp_scale_coord[1] = 0;
 
 		// поиск смасштабированной координаты по Х для точки класса Dot
-	double delta = INF_DELTA; // величина, с помощью которой определяется наиболее близкая смасштабированная координата
+	double delta = INF_MAX_DELTA; // величина, с помощью которой определяется наиболее близкая смасштабированная координата
 	//std::cout << "delta " << delta << '\n';
 
 	// проходим по длине поля
@@ -87,7 +87,7 @@ void Dot::Set_scale_coord(const double& r_LENGTH_BEHIND, const double* p_REAL_CE
 
 		// поиск смасштабированной координаты по Y для точки класса Dot
 	// возвращаем большое значение для дельты
-	delta = INF_DELTA;
+	delta = INF_MAX_DELTA;
 
 	// проходим по ширине поля
 	while (temp_scale_coord[1] < FIELD_WIDTH)
