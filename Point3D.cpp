@@ -72,10 +72,23 @@ void Point3D::Reset_coords()
 // [in] const double* - массив спроецированных координат
 void Point3D::Set_projection_coords(const double* p_PROJ_COORDS)
 {
-	m_projection_coord[0] = p_PROJ_COORDS[0];
-	m_projection_coord[1] = p_PROJ_COORDS[1];
-	m_projection_coord[2] = p_PROJ_COORDS[2];
+	std::abs(p_PROJ_COORDS[0]) < 1E-6 ? m_projection_coord[0] = 0 : m_projection_coord[0] = p_PROJ_COORDS[0];
+	std::abs(p_PROJ_COORDS[1]) < 1E-6 ? m_projection_coord[1] = 0 : m_projection_coord[1] = p_PROJ_COORDS[1];
+	std::abs(p_PROJ_COORDS[2]) < 1E-6 ? m_projection_coord[2] = 0 : m_projection_coord[2] = p_PROJ_COORDS[2];
 }
 
+// поместить спроецированные координаты точки в принятый массив
+void Point3D::Get_proj_coords(double* p_coords) const
+{
+	p_coords[0] = m_projection_coord[0];
+	p_coords[1] = m_projection_coord[1];
+	p_coords[2] = m_projection_coord[2];
+}
 
+// установить реальные координаты в 2-хмерной системе координат
+void Point3D::Set_2D_coords(const double* p_coords)
+{
+	std::abs(p_coords[0]) < 1E-6 ? m_real_coord_2D[0] = 0 : m_real_coord_2D[0] = p_coords[0];
+	std::abs(p_coords[1]) < 1E-6 ? m_real_coord_2D[1] = 0 : m_real_coord_2D[1] = p_coords[1];
+}
 

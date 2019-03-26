@@ -17,10 +17,10 @@
 
 //########################################################################
 
-#define PI 3.1415926535    // число пи
+#define PI 3.1415926535897932384626433832795    // число пи
 
-#define AZIMUT_ANGLE (double) 39   // в градусах !!!
-#define ZENIT_ANGLE  (double) 471    // в градусах !!!
+#define AZIMUT_ANGLE (double) 90 // в градусах !!!
+#define ZENIT_ANGLE  (double) 90 // в градусах !!!
 
 #include "Field3D.h"
 #include "Field3D.cpp"
@@ -31,10 +31,12 @@ int main()
 	Field3D my_field;
 
 	my_field.Add_point(0,0,0);
-	my_field.Add_point(0,3,3);
+	my_field.Add_point(1,1,1);
 	my_field.Add_point(4,2,0);
 
-	my_field.Show_all_points();
+	my_field.Add_point(1,2,0);
+	my_field.Add_point(3,4,0);
+
 
 	my_field.Project_all_points(AZIMUT_ANGLE, ZENIT_ANGLE);
 

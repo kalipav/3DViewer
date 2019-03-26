@@ -34,6 +34,12 @@ public:
 
 	// установить спроецированные координаты из переданного массива
 	void Set_projection_coords(const double*);
+
+	// поместить спроецированные координаты точки в принятый массив
+	void Get_proj_coords(double*) const;
+
+	// установить реальные координаты в 2-хмерной системе координат
+	void Set_2D_coords(const double*);
 };
 
 #endif

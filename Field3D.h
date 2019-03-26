@@ -4,6 +4,31 @@
 #include "Point3D.h"
 #include "Point3D.cpp"
 
+// параметры метода Field3D::Kramer
+struct Kramer_params
+{
+	// спроецированные координаты (x, y, z)
+	double* proj_coords;
+
+	// координаты направляющего вектора (x, y, z)
+	const double* direction_vector;
+
+	// координаты точки (x, y, z), через которую прохидит прямая
+	const double* dot_coord;
+
+	// коэффициент а плоскости
+	const double a_coef_plane;
+
+	// коэффициент b плоскости
+	const double b_coef_plane;
+
+	// коэффициент c плоскости
+	const double c_coef_plane;
+
+	// коэффициент d плоскости
+	const double d_coef_plane;
+};
+
 class Field3D
 {
 private:
@@ -28,6 +53,9 @@ public:
 
 	// перевести все точки в 2-хмерное пространство
 	void Convert_2D(const double&, const double&);
+
+	// решение теоремы Крамера
+	bool Kramer(const Kramer_params&);
 };
 
 
