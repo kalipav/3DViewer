@@ -56,23 +56,12 @@ public:
 
 	// решение теоремы Крамера
 	bool Kramer(const Kramer_params&);
+
+	// установка смасштабированных координат
+	void Set_scale_coords_all(const double&, const double*);
+
+	// отрисовка
+	void Draw() const;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #endif // _FIELD3D_H_

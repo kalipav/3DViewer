@@ -24,7 +24,7 @@ Point3D::Point3D(const double& r_X, const double& r_Y, const double& r_Z)
 	m_scale_coord_2D[0] = 0;
 	m_scale_coord_2D[1] = 0;
 
-	std::cout << "Point created.\n";
+	//std::cout << "Point created.\n";
 }
 
 // деструктор
@@ -78,6 +78,7 @@ void Point3D::Set_projection_coords(const double* p_PROJ_COORDS)
 }
 
 // поместить спроецированные координаты точки в принятый массив
+// [in/out] double* - указатель на принятый массив
 void Point3D::Get_proj_coords(double* p_coords) const
 {
 	p_coords[0] = m_projection_coord[0];
@@ -86,9 +87,35 @@ void Point3D::Get_proj_coords(double* p_coords) const
 }
 
 // установить реальные координаты в 2-хмерной системе координат
-void Point3D::Set_2D_coords(const double* p_coords)
+// [in] const double* - указатель на принятый массив
+void Point3D::Set_2D_coords(const double* p_COORDS)
 {
-	std::abs(p_coords[0]) < 1E-6 ? m_real_coord_2D[0] = 0 : m_real_coord_2D[0] = p_coords[0];
-	std::abs(p_coords[1]) < 1E-6 ? m_real_coord_2D[1] = 0 : m_real_coord_2D[1] = p_coords[1];
+	std::abs(p_COORDS[0]) < 1E-6 ? m_real_coord_2D[0] = 0 : m_real_coord_2D[0] = p_COORDS[0];
+	std::abs(p_COORDS[1]) < 1E-6 ? m_real_coord_2D[1] = 0 : m_real_coord_2D[1] = p_COORDS[1];
 }
+
+// поместить координаты точки в 2-хмерном пространстве в принятый массив
+// [in/out] double* - указатель на принятый массив
+void Point3D::Get_2D_coords(double* p_coords) const
+{
+	p_coords[0] = m_real_coord_2D[0];
+	p_coords[1] = m_real_coord_2D[1];
+}
+
+// установить смасштабированные координаты в 2-хмерной системе координат
+// [in] const int* - указатель на принятый массив
+void Point3D::Set_scale_coords(const int* p_COORDS)
+{
+	m_scale_coord_2D[0] = p_COORDS[0];
+	m_scale_coord_2D[1] = p_COORDS[1];
+}
+
+// поместить смасштабированные координаты точки в принятый массив
+// [in/out] double* - указатель на принятый массив
+void Point3D::Get_scale_coords(int* p_coords) const
+{
+	p_coords[0] = m_scale_coord_2D[0];
+	p_coords[1] = m_scale_coord_2D[1];
+}
+
 

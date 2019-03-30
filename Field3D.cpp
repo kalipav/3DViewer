@@ -6,7 +6,7 @@ Field3D::Field3D()
 	// очищаем вектор
 	m_points.clear();
 
-	std::cout << "Field created.\n";
+	//std::cout << "Field created.\n";
 }
 
 // деструктор
@@ -51,7 +51,7 @@ void Field3D::Show_all_points() const
 // [in] const double& - зенитный угол
 void Field3D::Project_all_points(const double& r_AZIMUT, const double& r_ZENIT)
 {
-	std::cout << "Field3D::Project_all_points starts\n";
+	//std::cout << "Field3D::Project_all_points starts\n";
 
 		// сбрасываем координаты проекции и смасштабированные координаты, т.к. изменяется плоскость проекции
 	// проход по вектору
@@ -88,8 +88,8 @@ void Field3D::Project_all_points(const double& r_AZIMUT, const double& r_ZENIT)
 	second_point_coord[2] = std::cos(zenit_rad) * std::cos(azimut_rad);
 
 	// углы в градусах
-	std::cout << "Azimut ungle (grad) = " << r_AZIMUT << "\n";
-	std::cout << "Zenit ungle (grad) = " << r_ZENIT << "\n";
+	//std::cout << "Azimut ungle (grad) = " << r_AZIMUT << "\n";
+	//std::cout << "Zenit ungle (grad) = " << r_ZENIT << "\n";
 
 	// координаты второй точки направляющего вектора
 	//std::cout << "second_point_coord: {" << second_point_coord[0] << ", " << second_point_coord[1] << ", " << second_point_coord[2] << "}\n\n";
@@ -171,7 +171,7 @@ void Field3D::Project_all_points(const double& r_AZIMUT, const double& r_ZENIT)
 		iter->Set_projection_coords(proj_coords);
 	};
 
-	std::cout << "Field3D::Project_all_points done\n";
+	//std::cout << "Field3D::Project_all_points done\n";
 }
 
 // перевести все точки в 2-хмерное пространство
@@ -179,7 +179,7 @@ void Field3D::Project_all_points(const double& r_AZIMUT, const double& r_ZENIT)
 // [in] const double& - зенитный угол
 void Field3D::Convert_2D(const double& r_AZIMUT, const double& r_ZENIT)
 {
-	std::cout << "Convertation points in 2D starts\n";
+	//std::cout << "Convertation points in 2D starts\n";
 
 		// прямые О1Х1 и О1Y1 (оси 2-хмерной системы координат)
 
@@ -197,11 +197,43 @@ void Field3D::Convert_2D(const double& r_AZIMUT, const double& r_ZENIT)
 	// начальные координаты второй точки O1Y1 до смещения
 	double O1Y1_second_point_coord[3] = {0, 1, 0};
 
-		// азимутальный и зенитный углы в радианах
-	double azimut_rad = r_AZIMUT * PI / 180;
-	double zenit_rad = r_ZENIT * PI / 180;
 
-		// перемещение второй точки О1Х1                               <-------------------------------------------
+	// перевод зенитного и азимутального углов в int (для кратности 360)
+	int int_AZIMUT = (int)r_AZIMUT;
+	int int_ZENIT = (int)r_ZENIT;
+
+	// перевод углов в диапазон [0;360] градусов для удобства вычислений
+	if (int_AZIMUT <= -360 || int_AZIMUT >= 360)
+	{
+		int_AZIMUT %= 360;
+		//std::cout << "int_AZIMUT = " << int_AZIMUT << "\n";
+	};
+	if (int_ZENIT <= -360 || int_ZENIT >= 360)
+	{
+		int_ZENIT %= 360;
+		//std::cout << "int_ZENIT = " << int_ZENIT << "\n";
+	};
+
+	// избавляемся от отрицательных углов
+	if (int_AZIMUT < 0)
+	{
+		int_AZIMUT += 360;
+		//std::cout << "int_AZIMUT = " << int_AZIMUT << "\n";
+	};
+	if (int_ZENIT < 0)
+	{
+		int_ZENIT += 360;
+		//std::cout << "int_ZENIT = " << int_ZENIT << "\n";
+	};
+
+	// азимутальный и зенитный углы в радианах
+	double azimut_rad = int_AZIMUT * PI / 180;
+	double zenit_rad = int_ZENIT * PI / 180;
+
+	//double azimut_rad = r_AZIMUT * PI / 180;
+	//double zenit_rad = r_ZENIT * PI / 180;
+
+		// перемещение второй точки О1Х1
 	// новая координата х О1Х1
 	O1X1_second_point_coord[0] = std::cos(zenit_rad) * std::cos(azimut_rad);
 
@@ -212,7 +244,7 @@ void Field3D::Convert_2D(const double& r_AZIMUT, const double& r_ZENIT)
 	O1X1_second_point_coord[2] = (-1) * std::cos(zenit_rad) * std::sin(azimut_rad);
 
 	// координаты второй точки  О1Х1
-	std::cout << "O1X1_second_point_coord: {" << O1X1_second_point_coord[0] << ", " << O1X1_second_point_coord[1] << ", " << O1X1_second_point_coord[2] << "}\n";
+	//std::cout << "O1X1_second_point_coord: {" << O1X1_second_point_coord[0] << ", " << O1X1_second_point_coord[1] << ", " << O1X1_second_point_coord[2] << "}\n";
 
 		// перемещение второй точки О1Y1
 	// новая координата х О1Y1
@@ -225,7 +257,7 @@ void Field3D::Convert_2D(const double& r_AZIMUT, const double& r_ZENIT)
 	O1Y1_second_point_coord[2] = (-1) * std::sin(zenit_rad) * std::cos(azimut_rad);
 
 	// координаты второй точки  О1Х1
-	std::cout << "O1Y1_second_point_coord: {" << O1Y1_second_point_coord[0] << ", " << O1Y1_second_point_coord[1] << ", " << O1Y1_second_point_coord[2] << "}\n";
+	//std::cout << "O1Y1_second_point_coord: {" << O1Y1_second_point_coord[0] << ", " << O1Y1_second_point_coord[1] << ", " << O1Y1_second_point_coord[2] << "}\n";
 
 		// направляющие вектора прямых О1Х1 и О1Y1
 	// направляющий вектор прямой О1Х1
@@ -378,19 +410,102 @@ void Field3D::Convert_2D(const double& r_AZIMUT, const double& r_ZENIT)
 
 		//std::cout << "Coord_y = " << point_2D_coords[1] << "\n";
 
-		// корректировка знака координаты в зависимости от положения проецирующей плоскости			<-----------------------------
+		// корректировка знака координаты в зависимости от положения проецирующей плоскости
+		if (int_AZIMUT >= 0 && int_AZIMUT < 90 && int_ZENIT >= 0 && int_ZENIT < 90)
+		{
+
+		};
+
+		if (int_AZIMUT >= 0 && int_AZIMUT < 90 && int_ZENIT >= 90 && int_ZENIT < 180)
+		{
+			point_2D_coords[0] *= (-1);
+			point_2D_coords[1] *= (-1);
+		};
+
+		if (int_AZIMUT >= 0 && int_AZIMUT < 90 && int_ZENIT >= 180 && int_ZENIT < 270)
+		{
+			point_2D_coords[0] *= (-1);
+			point_2D_coords[1] *= (-1);
+		};
+
+		if (int_AZIMUT >= 0 && int_AZIMUT < 90 && int_ZENIT >= 270 && int_ZENIT < 360)
+		{
+
+		};
+		//##############################################################################
+		if (int_AZIMUT >= 90 && int_AZIMUT < 180 && int_ZENIT >= 0 && int_ZENIT < 90)
+		{
+			point_2D_coords[0] *= (-1);
+		};
+
+		if (int_AZIMUT >= 90 && int_AZIMUT < 180 && int_ZENIT >= 90 && int_ZENIT < 180)
+		{
+			point_2D_coords[1] *= (-1);
+		};
+
+		if (int_AZIMUT >= 90 && int_AZIMUT < 180 && int_ZENIT >= 180 && int_ZENIT < 270)
+		{
+			point_2D_coords[1] *= (-1);
+		};
+
+		if (int_AZIMUT >= 90 && int_AZIMUT < 180 && int_ZENIT >= 270 && int_ZENIT < 360)
+		{
+			point_2D_coords[0] *= (-1);
+		};
+		//##############################################################################
+		if (int_AZIMUT >= 180 && int_AZIMUT < 270 && int_ZENIT >= 0 && int_ZENIT < 90)
+		{
+			point_2D_coords[0] *= (-1);
+		};
+
+		if (int_AZIMUT >= 180 && int_AZIMUT < 270 && int_ZENIT >= 90 && int_ZENIT < 180)
+		{
+			point_2D_coords[1] *= (-1);
+		};
+
+		if (int_AZIMUT >= 180 && int_AZIMUT < 270 && int_ZENIT >= 180 && int_ZENIT < 270)
+		{
+			point_2D_coords[1] *= (-1);
+		};
+
+		if (int_AZIMUT >= 180 && int_AZIMUT < 270 && int_ZENIT >= 270 && int_ZENIT < 360)
+		{
+			point_2D_coords[0] *= (-1);
+		};
+		//##############################################################################
+		if (int_AZIMUT >= 270 && int_AZIMUT < 360 && int_ZENIT >= 0 && int_ZENIT < 90)
+		{
+
+		};
+
+		if (int_AZIMUT >= 270 && int_AZIMUT < 360 && int_ZENIT >= 90 && int_ZENIT < 180)
+		{
+			point_2D_coords[0] *= (-1);
+			point_2D_coords[1] *= (-1);
+		};
+
+		if (int_AZIMUT >= 270 && int_AZIMUT < 360 && int_ZENIT >= 180 && int_ZENIT < 270)
+		{
+			point_2D_coords[0] *= (-1);
+			point_2D_coords[1] *= (-1);
+		};
+
+		if (int_AZIMUT >= 270 && int_AZIMUT < 360 && int_ZENIT >= 270 && int_ZENIT < 360)
+		{
+
+		};
+		//##############################################################################
 
 
 
-		std::cout << "Coords in 2D: {" << point_2D_coords[0] << ", " << point_2D_coords[1] << "}\n";
+		//std::cout << "Coords in 2D: {" << point_2D_coords[0] << ", " << point_2D_coords[1] << "}\n";
 
 		// установить реальные координаты в 2-хмерной системе координат
 		iter->Set_2D_coords(point_2D_coords);
 	};
 
-	std::cout << "Convertation points in 2D done\n";
+	//std::cout << "Convertation points in 2D done\n";
 }
-
 
 // решение теоремы Крамера
 // [in/out] Kramer_param& - параметры для решения теоремы Крамера
@@ -618,6 +733,161 @@ bool Field3D::Kramer(const Kramer_params& r_PARAMS)
 	r_PARAMS.proj_coords[2] = determinant_z / (determinant + INF_MIN_DELTA);
 
 	// система имеет решение
-	std::cout << "System has a solution\n";
+	//std::cout << "System has a solution\n";
 	return true;
 };
+
+// установка смасштабированных координат
+// [in] const double& - расстояние между двумя соседними пикселами
+// [in] const double& - координаты центральной точки
+void Field3D::Set_scale_coords_all(const double& r_LENGTH_BEHIND_PIXELS, const double* p_CENTER_REAL_COORD)
+{
+	// проход по вектору
+	for (std::vector<Point3D>::iterator iter = m_points.begin(); iter != m_points.end(); ++iter)
+	{
+		// массив временных реальных координат для прохода по всему полю от левого верхнего угла вправо (по длине) и вниз (по ширине)
+		double temp_real_coord[2];
+
+		// установка реальных координат верхней левой точки
+		temp_real_coord[0] = p_CENTER_REAL_COORD[0] - FIELD_LENGTH / 2 * r_LENGTH_BEHIND_PIXELS;
+		temp_real_coord[1] = p_CENTER_REAL_COORD[1] - FIELD_WIDTH / 2 * r_LENGTH_BEHIND_PIXELS;
+
+		// массив реальных координат верхней правой точки
+		double temp_right_real_coord[2];
+
+		// установка реальных координат нижней правой точки
+		temp_right_real_coord[0] = p_CENTER_REAL_COORD[0] + FIELD_LENGTH / 2 * r_LENGTH_BEHIND_PIXELS;
+		temp_right_real_coord[1] = p_CENTER_REAL_COORD[1] + FIELD_WIDTH / 2 * r_LENGTH_BEHIND_PIXELS;
+
+		// координаты точки
+		double point_2D_coord[2];
+
+		// инициализация координат точки
+		iter->Get_2D_coords(point_2D_coord);
+
+		// когда точка находится за пределами видимой области - переход к вычислениям следующей точки
+		if (temp_real_coord[0] > point_2D_coord[0] || temp_real_coord[1] > point_2D_coord[0] ||
+			temp_right_real_coord[0] < point_2D_coord[0] || temp_right_real_coord[1] < point_2D_coord[0])
+		{
+			continue;
+		};
+
+		// массив временных смасштабированных координат для прохода по всему полю от левого верхнего угла вправо (по длине) и вниз (по ширине)
+		int temp_scale_coord[2] = {0, 0};
+
+		// смасштабированные координаты точки
+		int point_scale_coords[2];
+
+			// поиск смасштабированной координаты по Х для точки
+		double delta = INF_MAX_DELTA; // величина, с помощью которой определяется наиболее близкая смасштабированная координата
+		//std::cout << "delta " << delta << '\n';
+
+		// проходим по длине поля
+		while (temp_scale_coord[0] < FIELD_LENGTH)
+		{
+			if (delta > std::abs(point_2D_coord[0] - temp_real_coord[0]))
+			{
+				//std::cout << "x=" << temp_scale_coord[0] << " d=" << std::abs(m_real_coord[0] - temp_real_coord[0]) << '\n';
+				// обновляем delta
+				delta = std::abs(point_2D_coord[0] - temp_real_coord[0]);
+
+				// присваивает максимально близкую смасштабированную координату при данной delta
+				point_scale_coords[0] = temp_scale_coord[0];
+			};
+
+			// устанавливаем следующие значения для реал. и смасшт. координат
+			temp_real_coord[0] += r_LENGTH_BEHIND_PIXELS;
+			temp_scale_coord[0]++;
+		};
+
+			// поиск смасштабированной координаты по Y для точки класса Dot
+		// возвращаем большое значение для дельты
+		delta = INF_MAX_DELTA;
+
+		// проходим по ширине поля
+		while (temp_scale_coord[1] < FIELD_WIDTH)
+		{
+			if (delta > std::abs(point_2D_coord[1] - temp_real_coord[1]))
+			{
+				//std::cout << "y=" << temp_scale_coord[1] << " d=" << std::abs(m_real_coord[1] - temp_real_coord[1]) << '\n';
+				// обновляем delta
+				delta = std::abs(point_2D_coord[1] - temp_real_coord[1]);
+
+				// присваивает максимально близкую смасштабированную координату при данной delta
+				point_scale_coords[1] = temp_scale_coord[1];
+			};
+
+			// устанавливаем следующие значения для реал. и смасшт. координат
+			temp_real_coord[1] += r_LENGTH_BEHIND_PIXELS;
+			temp_scale_coord[1]++;
+		};
+
+		//	установить для точки смасштабированные координаты
+		iter->Set_scale_coords(point_scale_coords);
+
+		//std::cout << "point_scale_coords: " << point_scale_coords[0] << " " << point_scale_coords[1] << '\n';
+	};
+}
+
+// отрисовка
+void Field3D::Draw() const
+{
+	// создаем поле
+	char field[FIELD_LENGTH][FIELD_WIDTH];
+
+	// все ячейки поля делаем пустыми
+	for (int i = 0; i < FIELD_LENGTH; i++)
+	{
+		for (int j = 0; j < FIELD_WIDTH; j++)
+		{
+			field[i][j] = EMPTY_SYMBOL;
+		}
+	};
+
+		// заполняем ячейки поля точками
+	int temp_coord[2];
+	double coords_2D[2];
+
+	// проходим по вектору точек
+	for (std::vector<Point3D>::const_iterator ITER = m_points.begin(); ITER != m_points.end(); ++ITER)
+	{
+		// получаем смасштабированные координаты точки, помещаем в переданный функции массив
+		ITER->Get_scale_coords(temp_coord);
+
+		// получаем 2д реальные точки (для отсева точек выходящих за пределы поля)
+		ITER->Get_2D_coords(coords_2D);
+
+		// отсев точек выходящих за пределы поля
+		if (temp_coord[0] == 0 && temp_coord[1] == 0 && coords_2D[0] != 0.0 && coords_2D[1] != 0.0)
+		{
+			continue;
+		};
+
+		int first = temp_coord[0];
+		int second = temp_coord[1];
+
+		field[first][second] = FULL_SYMBOL;
+	};
+
+	// отрисовка
+	for (int i = 0; i < FIELD_LENGTH; ++i)
+	{
+		std::cout << "-";
+	};
+	std::cout << '\n';
+			;
+    for (int i = FIELD_WIDTH - 1; i >= 0; i--) // сначала по ширине с конца массива, причем -1, чтобы не выйти за границы
+    {
+    	for (int j = 0; j < FIELD_LENGTH; j++) // потом по длине с начала массива
+    	{
+    		std::cout << field[j][i];
+    	};
+    	std::cout << "\n";
+    };
+
+	for (int i = 0; i < FIELD_LENGTH; ++i)
+	{
+		std::cout << "-";
+	};
+	std::cout << '\n';
+}
