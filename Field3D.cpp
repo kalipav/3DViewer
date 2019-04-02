@@ -233,31 +233,56 @@ void Field3D::Convert_2D(const double& r_AZIMUT, const double& r_ZENIT)
 	//double azimut_rad = r_AZIMUT * PI / 180;
 	//double zenit_rad = r_ZENIT * PI / 180;
 
-		// перемещение второй точки О1Х1
-	// новая координата х О1Х1
-	O1X1_second_point_coord[0] = std::cos(zenit_rad) * std::cos(azimut_rad);
+			//перемещение точек в зависимости от азимутального и зенитного углов
 
-	// новая координата y О1Х1 (не зависит от азимутального угла)
+		// перемещение второй точки О1Х1 по азимутальному углу
+	// координата х прямой О1Х1 после перемещения по азимутальному углу
+	O1X1_second_point_coord[0] = std::cos(azimut_rad);
+
+	// координата y прямой О1Х1 после перемещения по азимутальному углу
+	O1X1_second_point_coord[1] = 0;
+
+	// координата z прямой О1Х1 после перемещения по азимутальному углу
+	O1X1_second_point_coord[2] = (-1) * std::sin(azimut_rad);
+
+		// перемещение второй точки О1Х1 по зенитному углу
+	// из-за множителя, касающегося азимутального угла, выбирается умножение или присваивание, чтобы не получить 0
+
+	// координата х прямой О1Х1 после перемещения по зенитному углу
+	O1X1_second_point_coord[0];
+
+	// координата y прямой О1Х1 после перемещения по зенитному углу
 	O1X1_second_point_coord[1] = std::sin(zenit_rad);
 
-	// новая координата z О1Х1
-	O1X1_second_point_coord[2] = (-1) * std::cos(zenit_rad) * std::sin(azimut_rad);
+	// координата z прямой О1Х1 после перемещения по зенитному углу
+	if (O1X1_second_point_coord[2])
+	{
+		O1X1_second_point_coord[2] *= std::sin(zenit_rad);
+	}
+	else
+	{
+		O1X1_second_point_coord[2] = std::sin(zenit_rad);
+	};
 
-	// координаты второй точки  О1Х1
-	//std::cout << "O1X1_second_point_coord: {" << O1X1_second_point_coord[0] << ", " << O1X1_second_point_coord[1] << ", " << O1X1_second_point_coord[2] << "}\n";
+	// координаты второй точки О1Х1
+	std::cout << "O1X1_second_point_coord: {" << O1X1_second_point_coord[0] << ", " << O1X1_second_point_coord[1] << ", " << O1X1_second_point_coord[2] << "}\n";
 
-		// перемещение второй точки О1Y1
-	// новая координата х О1Y1
-	O1Y1_second_point_coord[0] = (-1) * std::sin(zenit_rad) * std::sin(azimut_rad);
 
-	// новая координата y О1Y1 (не зависит от азимутального угла)
-	O1Y1_second_point_coord[1] = std::cos(zenit_rad);
+	// перемещение второй точки О1Y1 по азимутальному углу
+	// координата х прямой О1Y1 после перемещения по азимутальному углу
+	O1Y1_second_point_coord[0] = 0;
+	//O1Y1_second_point_coord[0] = (-1) * std::sin(zenit_rad) * std::sin(azimut_rad);
 
-	// новая координата z О1Y1
-	O1Y1_second_point_coord[2] = (-1) * std::sin(zenit_rad) * std::cos(azimut_rad);
+	// координата y прямой О1Y1 после перемещения по азимутальному углу
+	O1Y1_second_point_coord[1] = 1;
+	//O1Y1_second_point_coord[1] = std::cos(zenit_rad);
 
-	// координаты второй точки  О1Х1
-	//std::cout << "O1Y1_second_point_coord: {" << O1Y1_second_point_coord[0] << ", " << O1Y1_second_point_coord[1] << ", " << O1Y1_second_point_coord[2] << "}\n";
+	// координата z прямой О1Y1 после перемещения по азимутальному углу
+	O1Y1_second_point_coord[2] = 0;
+	//O1Y1_second_point_coord[2] = (-1) * std::sin(zenit_rad) * std::cos(azimut_rad);
+
+	// координаты второй точки О1Y1
+	std::cout << "O1Y1_second_point_coord: azim{" << O1Y1_second_point_coord[0] << ", " << O1Y1_second_point_coord[1] << ", " << O1Y1_second_point_coord[2] << "}\n";
 
 		// направляющие вектора прямых О1Х1 и О1Y1
 	// направляющий вектор прямой О1Х1
@@ -274,6 +299,37 @@ void Field3D::Convert_2D(const double& r_AZIMUT, const double& r_ZENIT)
 			O1Y1_second_point_coord[2] - central_point_coord[2]
 	};
 
+	// координаты третьей точки O1X1 (симметрична второй точке относительно начала координат)
+	double O1X1_third_point_coord[3];
+
+		// третья точка О1Х1
+	// новая координата х О1Х1
+	O1X1_third_point_coord[0] = O1X1_second_point_coord[0] * (-1);
+
+	// новая координата y О1Х1 (не зависит от азимутального угла)
+	O1X1_third_point_coord[1] = O1X1_second_point_coord[1] * (-1);
+
+	// новая координата z О1Х1
+	O1X1_third_point_coord[2] = O1X1_second_point_coord[2] * (-1);
+
+	std::cout << "O1X1_third_point_coord: {" << O1X1_third_point_coord[0] << ", " << O1X1_third_point_coord[1] << ", " << O1X1_third_point_coord[2] << "}\n";
+
+	// координаты третьей точки O1Y1 (симметрична второй точке относительно начала координат)
+	double O1Y1_third_point_coord[3];
+
+		// третья точка О1Y1
+	// новая координата х О1Y1
+	O1Y1_third_point_coord[0] = O1Y1_second_point_coord[0] * (-1);
+
+	// новая координата y О1Y1 (не зависит от азимутального угла)
+	O1Y1_third_point_coord[1] = O1Y1_second_point_coord[1] * (-1);
+
+	// новая координата z О1Y1
+	O1Y1_third_point_coord[2] = O1Y1_second_point_coord[2] * (-1);
+
+	std::cout << "O1Y1_third_point_coord: {" << O1Y1_third_point_coord[0] << ", " << O1Y1_third_point_coord[1] << ", " << O1Y1_third_point_coord[2] << "}\n";
+
+
 		// перевод точек в 2D
 
 	// проход по вектору
@@ -288,10 +344,119 @@ void Field3D::Convert_2D(const double& r_AZIMUT, const double& r_ZENIT)
 		// координаты точки в 2-хмерном пространстве
 		double point_2D_coords[2];
 
-		//std::cout << "point_proj_coord[0] " << point_proj_coord[0] << "\n";
-		//std::cout << "point_proj_coord[1] " << point_proj_coord[1] << "\n";
-		//std::cout << "point_proj_coord[2] " << point_proj_coord[2] << "\n";
+		std::cout << "proj_point: {" << point_proj_coord[0] << ", " << point_proj_coord[1] << ", " << point_proj_coord[2] << "}\n";
 
+			// нахождение угла между осью х и прямой, проходящей через начало координат и точку проекции
+		// канонич. уравнение прямой, проходящей через начало координат и точку проекции (из вектора) на плоскость
+		// x / point_proj_coord_x = y / point_proj_coord_y = z / point_proj_coord_z
+
+		// канонич. уравнение оси х
+		// x / 1 = y / 0 = z / 0
+
+		// исключение (проекция находится в начале координат)
+		if (point_proj_coord[0] == 0 &&
+			point_proj_coord[1] == 0 &&
+			point_proj_coord[2] == 0 )
+		{
+			point_2D_coords[0] = 0;
+			point_2D_coords[1] = 0;
+			continue;
+		};
+
+		// угол между прямыми в радианах
+		double ungle_rad;
+
+		// угол между прямыми
+		// a = arccos( abs[proj_x * 1] / [abs(sqrt( proj_x ^ 2 + proj_y ^ 2 + proj_z ^ 2)) * abs(sqrt(1 ^ 2 + 0 ^ 2 + 0 ^ 2))] )
+
+		// нахождение угла
+		ungle_rad = std::acos(
+					std::abs(point_proj_coord[0])
+					/
+					(
+						std::abs(
+							std::sqrt(
+								std::pow(point_proj_coord[0],2) +
+								std::pow(point_proj_coord[1],2) +
+								std::pow(point_proj_coord[2],2)
+							)
+						)
+					)
+		);
+		std::cout << "ungle grad " << ungle_rad * 180 / PI << "\n";
+
+		// длина отрезка от начала координат до точки проекций
+		double length = std::sqrt(
+							std::pow(point_proj_coord[0],2) +
+							std::pow(point_proj_coord[1],2) +
+							std::pow(point_proj_coord[2],2)
+		);
+		std::cout << "length " << length << "\n";
+
+		// координата по х
+		point_2D_coords[0] = length * std::cos(ungle_rad);
+
+		// координата по y
+		point_2D_coords[1] = length * std::sin(ungle_rad);
+
+			// корректировка в зависимости от четверти, в которой находится точка
+		// четверть определяется по наименьшему расстоянию до 2-х точек осей (не считая центральной) из 4-х (2 из них будут в других четвертях)
+
+		// расстояние от спроецированной точки до второй точки оси O1Y1
+		double to_second_O1Y1 = std::sqrt(std::pow(point_proj_coord[0] - O1Y1_second_point_coord[0], 2) +
+										  std::pow(point_proj_coord[1] - O1Y1_second_point_coord[1], 2) +
+										  std::pow(point_proj_coord[2] - O1Y1_second_point_coord[2], 2));
+		std::cout << "Rasstojnie do second_O1Y1: " << to_second_O1Y1 << "\n";
+
+		// расстояние от спроецированной точки до второй точки оси O1X1
+		double to_second_O1X1 = std::sqrt(std::pow(point_proj_coord[0] - O1X1_second_point_coord[0], 2) +
+										  std::pow(point_proj_coord[1] - O1X1_second_point_coord[1], 2) +
+										  std::pow(point_proj_coord[2] - O1X1_second_point_coord[2], 2));
+		std::cout << "Rasstojnie do second_O1X1: " << to_second_O1X1 << "\n";
+
+		// расстояние от спроецированной точки до третьей точки оси O1Y1
+		double to_third_O1Y1 = std::sqrt(std::pow(point_proj_coord[0] - O1Y1_third_point_coord[0], 2) +
+										 std::pow(point_proj_coord[1] - O1Y1_third_point_coord[1], 2) +
+										 std::pow(point_proj_coord[2] - O1Y1_third_point_coord[2], 2));
+		std::cout << "Rasstojnie do third_O1Y1: " << to_third_O1Y1 << "\n";
+
+		// расстояние от спроецированной точки до третьей точки оси O1X1
+		double to_third_O1X1 = std::sqrt(std::pow(point_proj_coord[0] - O1X1_third_point_coord[0], 2) +
+										 std::pow(point_proj_coord[1] - O1X1_third_point_coord[1], 2) +
+										 std::pow(point_proj_coord[2] - O1X1_third_point_coord[2], 2));
+		std::cout << "Rasstojnie do third_O1X1: " << to_third_O1X1 << "\n";
+
+		// выбор четверти
+		if (to_second_O1Y1 <= to_third_O1Y1 && to_second_O1Y1 <= to_third_O1X1 &&
+			to_second_O1X1 <= to_third_O1Y1 && to_second_O1X1 <= to_third_O1X1)
+		{
+			std::cout << "Pervaja 4etvert'\n";
+			// первая четверть, знаки проекции 2Д сохраняются
+		}
+		else if (to_second_O1Y1 <= to_third_O1Y1 && to_second_O1Y1 <= to_second_O1X1 &&
+				 to_third_O1X1 <= to_third_O1Y1 && to_third_O1X1 <= to_second_O1X1)
+		{
+			std::cout << "Vtoraya 4etvert'\n";
+			// вторая четверть, x - отрицательный
+			point_2D_coords[0] *= (-1);
+		}
+		else if (to_third_O1X1 <= to_second_O1X1 && to_third_O1X1 <= to_second_O1Y1 &&
+				 to_third_O1Y1 <= to_second_O1X1 && to_third_O1Y1 <= to_second_O1Y1)
+		{
+			std::cout << "Tret'ja 4etvert'\n";
+			// третья четверть, x,y - отрицательные
+			point_2D_coords[0] *= (-1);
+			point_2D_coords[1] *= (-1);
+		}
+		else if (to_second_O1X1 <= to_third_O1X1 && to_second_O1X1 <= to_second_O1Y1 &&
+				 to_third_O1Y1 <= to_third_O1X1 && to_third_O1Y1 <= to_second_O1Y1)
+		{
+			std::cout << "4etvertaja 4etvert'\n";
+			// четвертая четверть, y - отрицательный
+			point_2D_coords[1] *= (-1);
+		};
+
+		/*
 			// нахождение координат 2D по х
 		// расстояние от прямой O1Y1 до точки будет координатой х в новой сист. координат
 
@@ -339,9 +504,7 @@ void Field3D::Convert_2D(const double& r_AZIMUT, const double& r_ZENIT)
 			return;
 		};
 
-		//std::cout << "O1Y1_proj_point[0] " << O1Y1_proj_point[0] << "\n";
-		//std::cout << "O1Y1_proj_point[1] " << O1Y1_proj_point[1] << "\n";
-		//std::cout << "O1Y1_proj_point[2] " << O1Y1_proj_point[2] << "\n";
+		std::cout << "Projection on O1Y1: {" << O1Y1_proj_point[0] << ", " << O1Y1_proj_point[1] << ", " << O1Y1_proj_point[2] << "}\n";
 
 		// координата х в 2-хмерной системе координат
 		// std::pow(x, y) - возведение числа х в степень y
@@ -398,104 +561,117 @@ void Field3D::Convert_2D(const double& r_AZIMUT, const double& r_ZENIT)
 			break;
 		};
 
-		//std::cout << "O1X1_proj_point[0] " << O1X1_proj_point[0] << "\n";
-		//std::cout << "O1X1_proj_point[1] " << O1X1_proj_point[1] << "\n";
-		//std::cout << "O1X1_proj_point[2] " << O1X1_proj_point[2] << "\n";
+		std::cout << "Projection on O1X1: {" << O1X1_proj_point[0] << ", " << O1X1_proj_point[1] << ", " << O1X1_proj_point[2] << "}\n";
 
 		// координата y в 2-хмерной системе координат
 		// std::pow(x, y) - возведение числа х в степень y
 		point_2D_coords[1] = std::sqrt(std::pow(point_proj_coord[0] - O1X1_proj_point[0], 2) +
-							 std::pow(point_proj_coord[1] - O1X1_proj_point[1], 2) +
-							 std::pow(point_proj_coord[2] - O1X1_proj_point[2], 2));
+							 	 	   std::pow(point_proj_coord[1] - O1X1_proj_point[1], 2) +
+							 	 	   std::pow(point_proj_coord[2] - O1X1_proj_point[2], 2));
+
+		// возвращаем знак в зависимости от положения точек в 2-хмерной системе
+		if (point_proj_coord[0] < O1X1_proj_point[0])
+		{
+			point_2D_coords[0] *= (-1);
+		};
+
+		if (point_proj_coord[1] < O1X1_proj_point[1])
+		{
+			point_2D_coords[1] *= (-1);
+		};
+
 
 		//std::cout << "Coord_y = " << point_2D_coords[1] << "\n";
+
 
 		// корректировка знака координаты в зависимости от положения проецирующей плоскости
 		if (int_AZIMUT >= 0 && int_AZIMUT < 90 && int_ZENIT >= 0 && int_ZENIT < 90)
 		{
 
-		};
+		}
 
-		if (int_AZIMUT >= 0 && int_AZIMUT < 90 && int_ZENIT >= 90 && int_ZENIT < 180)
+		else if (int_AZIMUT >= 0 && int_AZIMUT < 90 && int_ZENIT >= 90 && int_ZENIT < 180)
 		{
 			point_2D_coords[0] *= (-1);
 			point_2D_coords[1] *= (-1);
-		};
+		}
 
-		if (int_AZIMUT >= 0 && int_AZIMUT < 90 && int_ZENIT >= 180 && int_ZENIT < 270)
+		else if (int_AZIMUT >= 0 && int_AZIMUT < 90 && int_ZENIT >= 180 && int_ZENIT < 270)
 		{
 			point_2D_coords[0] *= (-1);
 			point_2D_coords[1] *= (-1);
-		};
+		}
 
-		if (int_AZIMUT >= 0 && int_AZIMUT < 90 && int_ZENIT >= 270 && int_ZENIT < 360)
+		else if (int_AZIMUT >= 0 && int_AZIMUT < 90 && int_ZENIT >= 270 && int_ZENIT < 360)
+		{
+
+		}
+
+		/*
+		//##############################################################################
+		else if (int_AZIMUT >= 90 && int_AZIMUT < 180 && int_ZENIT >= 0 && int_ZENIT < 90)
+		{
+			point_2D_coords[0] *= (-1);
+		}
+
+		else if (int_AZIMUT >= 90 && int_AZIMUT < 180 && int_ZENIT >= 90 && int_ZENIT < 180)
+		{
+			point_2D_coords[1] *= (-1);
+		}
+
+		else if (int_AZIMUT >= 90 && int_AZIMUT < 180 && int_ZENIT >= 180 && int_ZENIT < 270)
+		{
+			point_2D_coords[1] *= (-1);
+		}
+
+		else if (int_AZIMUT >= 90 && int_AZIMUT < 180 && int_ZENIT >= 270 && int_ZENIT < 360)
+		{
+			point_2D_coords[0] *= (-1);
+		}
+		//##############################################################################
+		else if (int_AZIMUT >= 180 && int_AZIMUT < 270 && int_ZENIT >= 0 && int_ZENIT < 90)
+		{
+			point_2D_coords[0] *= (-1);
+		}
+
+		else if (int_AZIMUT >= 180 && int_AZIMUT < 270 && int_ZENIT >= 90 && int_ZENIT < 180)
+		{
+			point_2D_coords[1] *= (-1);
+		}
+
+		else if (int_AZIMUT >= 180 && int_AZIMUT < 270 && int_ZENIT >= 180 && int_ZENIT < 270)
+		{
+			point_2D_coords[1] *= (-1);
+		}
+
+		else if (int_AZIMUT >= 180 && int_AZIMUT < 270 && int_ZENIT >= 270 && int_ZENIT < 360)
+		{
+			point_2D_coords[0] *= (-1);
+		}
+		//##############################################################################
+		else if (int_AZIMUT >= 270 && int_AZIMUT < 360 && int_ZENIT >= 0 && int_ZENIT < 90)
+		{
+
+		}
+
+		else if (int_AZIMUT >= 270 && int_AZIMUT < 360 && int_ZENIT >= 90 && int_ZENIT < 180)
+		{
+			point_2D_coords[0] *= (-1);
+			point_2D_coords[1] *= (-1);
+		}
+
+		else if (int_AZIMUT >= 270 && int_AZIMUT < 360 && int_ZENIT >= 180 && int_ZENIT < 270)
+		{
+			point_2D_coords[0] *= (-1);
+			point_2D_coords[1] *= (-1);
+		}
+
+		else if (int_AZIMUT >= 270 && int_AZIMUT < 360 && int_ZENIT >= 270 && int_ZENIT < 360)
 		{
 
 		};
 		//##############################################################################
-		if (int_AZIMUT >= 90 && int_AZIMUT < 180 && int_ZENIT >= 0 && int_ZENIT < 90)
-		{
-			point_2D_coords[0] *= (-1);
-		};
-
-		if (int_AZIMUT >= 90 && int_AZIMUT < 180 && int_ZENIT >= 90 && int_ZENIT < 180)
-		{
-			point_2D_coords[1] *= (-1);
-		};
-
-		if (int_AZIMUT >= 90 && int_AZIMUT < 180 && int_ZENIT >= 180 && int_ZENIT < 270)
-		{
-			point_2D_coords[1] *= (-1);
-		};
-
-		if (int_AZIMUT >= 90 && int_AZIMUT < 180 && int_ZENIT >= 270 && int_ZENIT < 360)
-		{
-			point_2D_coords[0] *= (-1);
-		};
-		//##############################################################################
-		if (int_AZIMUT >= 180 && int_AZIMUT < 270 && int_ZENIT >= 0 && int_ZENIT < 90)
-		{
-			point_2D_coords[0] *= (-1);
-		};
-
-		if (int_AZIMUT >= 180 && int_AZIMUT < 270 && int_ZENIT >= 90 && int_ZENIT < 180)
-		{
-			point_2D_coords[1] *= (-1);
-		};
-
-		if (int_AZIMUT >= 180 && int_AZIMUT < 270 && int_ZENIT >= 180 && int_ZENIT < 270)
-		{
-			point_2D_coords[1] *= (-1);
-		};
-
-		if (int_AZIMUT >= 180 && int_AZIMUT < 270 && int_ZENIT >= 270 && int_ZENIT < 360)
-		{
-			point_2D_coords[0] *= (-1);
-		};
-		//##############################################################################
-		if (int_AZIMUT >= 270 && int_AZIMUT < 360 && int_ZENIT >= 0 && int_ZENIT < 90)
-		{
-
-		};
-
-		if (int_AZIMUT >= 270 && int_AZIMUT < 360 && int_ZENIT >= 90 && int_ZENIT < 180)
-		{
-			point_2D_coords[0] *= (-1);
-			point_2D_coords[1] *= (-1);
-		};
-
-		if (int_AZIMUT >= 270 && int_AZIMUT < 360 && int_ZENIT >= 180 && int_ZENIT < 270)
-		{
-			point_2D_coords[0] *= (-1);
-			point_2D_coords[1] *= (-1);
-		};
-
-		if (int_AZIMUT >= 270 && int_AZIMUT < 360 && int_ZENIT >= 270 && int_ZENIT < 360)
-		{
-
-		};
-		//##############################################################################
-
+		*/
 
 
 		//std::cout << "Coords in 2D: {" << point_2D_coords[0] << ", " << point_2D_coords[1] << "}\n";
@@ -731,6 +907,8 @@ bool Field3D::Kramer(const Kramer_params& r_PARAMS)
 
 	// координата z проекции точки на плоскость
 	r_PARAMS.proj_coords[2] = determinant_z / (determinant + INF_MIN_DELTA);
+
+	//std::cout << "System has a solution\n";
 
 	// система имеет решение
 	//std::cout << "System has a solution\n";
