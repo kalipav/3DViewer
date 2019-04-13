@@ -2,7 +2,7 @@
 #define _FIELD3D_H_
 
 #include "Point3D.h"
-#include "Point3D.cpp"
+#include <vector>
 
 // параметры метода Field3D::Kramer
 struct Kramer_params

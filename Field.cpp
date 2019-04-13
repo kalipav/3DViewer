@@ -1,4 +1,5 @@
 ﻿#include "Field.h"
+#include <iostream>
 
 // конструктор
 Field::Field()

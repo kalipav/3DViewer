@@ -1,4 +1,6 @@
 ﻿#include "Dot.h"
+#include <iostream>
+#include "defines.h"
 
 // конструктор
 // [in] const double& - реальная координата по X

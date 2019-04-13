@@ -1,4 +1,6 @@
 ﻿#include "Point3D.h"
+#include <math.h>
+#include <iostream>
 
 // конструктор
 //[in] const double& - координата точки по х

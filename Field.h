@@ -1,8 +1,9 @@
 ﻿#ifndef _FIELD_H_
 #define _FIELD_H_
 
+#include <vector>
 #include "Dot.h"
-#include "Dot.cpp"
+#include "defines.h"
 
 class Field
 {

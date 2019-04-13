@@ -1,4 +1,8 @@
 ﻿#include "Field3D.h"
+#include "Point3D.h"
+#include <iostream>
+#include <vector>
+#include "defines.h"
 
 // конструктор
 Field3D::Field3D()
